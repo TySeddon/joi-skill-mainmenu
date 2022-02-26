@@ -24,6 +24,9 @@ In home director create file called update-skills.sh
 
     echo "----Uninstalling joi-skill-mainmenu----"
     ./mycroft-msm remove joi-skill-mainmenu.tyseddon
+    echo "----Uninstalling skill-homeassistant----"
+    ./mycroft-msm remove skill-homeassistant
+    ./mycroft-msm remove skill-homeassistant.tyseddon
     echo "----Uninstalling joi-skill-music----"
     ./mycroft-msm remove joi-skill-music.tyseddon
     echo "----Uninstalling joi-skill-photo----"
@@ -31,6 +34,8 @@ In home director create file called update-skills.sh
 
     echo "----Installing joi-skill-mainmenu----"
     ./mycroft-msm install https://github.com/TySeddon/joi-skill-mainmenu.git
+    echo "----Installing skill-homeassistant----"
+    ./mycroft-msm install https://github.com/TySeddon/skill-homeassistant.git
     echo "----Installing joi-skill-music----"
     ./mycroft-msm install https://github.com/TySeddon/joi-skill-music.git
     echo "----Installing joi-skill-photo----"

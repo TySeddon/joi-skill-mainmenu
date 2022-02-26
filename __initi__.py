@@ -22,6 +22,7 @@ class JoiMainMenuSkill(MycroftSkill):
         it cannot utilise MycroftSkill methods as the class does not yet exist.
         """
         super().__init__()
+        self.learning = True
         self.stopped = False
         self.JOI_SERVER_URL = get_setting('joi_server_url')
 
@@ -30,6 +31,7 @@ class JoiMainMenuSkill(MycroftSkill):
         This function is invoked after the skill is fully constructed and
         registered with the system. Intents will be registered and Skill
         settings will be available."""
+        self.log.info("initialize")
         self.start_monitor()
         pass
 
