@@ -3,6 +3,7 @@ import os
 import webbrowser
 from uuid import uuid4
 from time import sleep
+from munch import munchify
 from adapt.intent import IntentBuilder
 from mycroft import MycroftSkill, intent_handler
 from mycroft.skills.common_play_skill import CommonPlaySkill, CPSMatchLevel
@@ -112,20 +113,24 @@ class JoiMainMenuSkill(MycroftSkill):
         if messages:
             self.log.info(f"Received {len(messages)} messages from Joi Server")
             for msg in messages:
-                self.log.info(msg)
-                if msg.message and msg.message.action:
-                    action = msg.message.action
-                    self.log.info(action)
-                    if action == "play_photos":
-                        self.bus.emit(Message("skill.joi-skill-photo.start"))
-                    elif action == "play_music":
-                        self.bus.emit(Message("skill.joi-skill-music.start"))
-                    elif action == "stop_photos":
-                        self.bus.emit(Message("skill.joi-skill-photo.stop"))
-                    elif action == "stop_music":
-                        self.bus.emit(Message("skill.joi-skill-music.stop"))
+                self.log.info(msg.message)
+                if msg.message:
+                    message_obj = munchify(msg.message)
+                    if hasattr(message_obj, 'action'):
+                        action = message_obj.action
+                        self.log.info(action)
+                        if action == "play_photos":
+                            self.bus.emit(Message("skill.joi-skill-photo.start"))
+                        elif action == "play_music":
+                            self.bus.emit(Message("skill.joi-skill-music.start"))
+                        elif action == "stop_photos":
+                            self.bus.emit(Message("skill.joi-skill-photo.stop"))
+                        elif action == "stop_music":
+                            self.bus.emit(Message("skill.joi-skill-music.stop"))
+                        else:
+                            self.log.warn(f"Unknown action {action}")
                     else:
-                        self.log.warn(f"Unknown action {action}")
+                        self.log.warn(f"DeviceMessage.Message has no action attribute")
 
     def handle_listener_started(self, message):
         self.log.info("handle_listener_started")
