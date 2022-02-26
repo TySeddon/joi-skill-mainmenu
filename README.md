@@ -49,6 +49,20 @@ In home director create file called update-skills.sh
     cd ~/mycroft-core
     ./start-mycroft.sh skills restart    
 
+Make script executable and writeable
+    sudo chmod a+xw update-skills.sh
+
+## Bash Script to Start Home Assistant
+In home director create file called start-smarthome.sh
+    #!/bin/bash
+    sudo -u homeassistant -H -s<<"EOF"
+    source /srv/homeassistant/bin/activate 
+    hass     
+    EOF
+
+Make script executable and writeable
+    sudo chmod a+xw start-smarthome.sh
+
 ## Virtual Environment Setup
 
 ### Install Virtual Environment
