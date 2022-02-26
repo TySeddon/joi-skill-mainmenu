@@ -112,6 +112,7 @@ class JoiMainMenuSkill(MycroftSkill):
         if messages:
             self.log.info(f"Received {len(messages)} messages from Joi Server")
             for msg in messages:
+                self.log.info(msg)
                 if msg.action:
                     if msg.action == "play_photos":
                         self.bus.emit(Message("skill.joi-skill-photo.start"))
