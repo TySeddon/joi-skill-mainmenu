@@ -40,6 +40,9 @@ class JoiMainMenuSkill(MycroftSkill):
         resident = self.joi_client.get_Resident()
         self.resident_name = resident.first_name
 
+        self.add_event("skill.joi-skill-mainmenu.stop", self.stop)
+        self.add_event("skill.joi-skill-mainmenu.show", self.open_browser_home)
+
         self.start_monitor()
         pass
 
@@ -107,6 +110,23 @@ class JoiMainMenuSkill(MycroftSkill):
         self.cancel_scheduled_event("MonitorJoiServer")
         self.not_playing_count = 0
 
+    def _process_message(self, message):
+        if hasattr(message, 'action'):
+            action = message.action
+            self.log.info(action)
+            if action == "play_photos":
+                self.bus.emit(Message("skill.joi-skill-photo.start"))
+            elif action == "play_music":
+                self.bus.emit(Message("skill.joi-skill-music.start"))
+            elif action == "stop_photos":
+                self.bus.emit(Message("skill.joi-skill-photo.stop"))
+            elif action == "stop_music":
+                self.bus.emit(Message("skill.joi-skill-music.stop"))
+            else:
+                self.log.warn(f"Unknown action {action}")
+        else:
+            self.log.warn(f"DeviceMessage.Message has no action attribute")
+
     def monitor_joi_server(self):
         #self.log.info("monitor_joi_server")
         messages = self.joi_client.get_DeviceMessages()
@@ -115,22 +135,7 @@ class JoiMainMenuSkill(MycroftSkill):
             for msg in messages:
                 self.log.info(msg.message)
                 if msg.message:
-                    message_obj = munchify(msg.message)
-                    if hasattr(message_obj, 'action'):
-                        action = message_obj.action
-                        self.log.info(action)
-                        if action == "play_photos":
-                            self.bus.emit(Message("skill.joi-skill-photo.start"))
-                        elif action == "play_music":
-                            self.bus.emit(Message("skill.joi-skill-music.start"))
-                        elif action == "stop_photos":
-                            self.bus.emit(Message("skill.joi-skill-photo.stop"))
-                        elif action == "stop_music":
-                            self.bus.emit(Message("skill.joi-skill-music.stop"))
-                        else:
-                            self.log.warn(f"Unknown action {action}")
-                    else:
-                        self.log.warn(f"DeviceMessage.Message has no action attribute")
+                    self._process_message(munchify(msg.message))
 
     def handle_listener_started(self, message):
         self.log.info("handle_listener_started")
