@@ -32,6 +32,13 @@ class JoiMainMenuSkill(MycroftSkill):
         registered with the system. Intents will be registered and Skill
         settings will be available."""
         self.log.info("initialize")
+
+        # establish connection to Joi server
+        joi_device_id = get_setting("device_id")
+        self.joi_client = JoiClient(joi_device_id)
+        resident = self.joi_client.get_Resident()
+        self.resident_name = resident.first_name
+
         self.start_monitor()
         pass
 
@@ -65,7 +72,7 @@ class JoiMainMenuSkill(MycroftSkill):
 
     def open_browser_home(self):
         joi_server_url = get_setting("joi_server_url")
-        url = f"{joi_server_url}/joi/joi_home"
+        url = f"{joi_server_url}/joi/joi_home?token={self.joi_client.token}"
 
         retry_count = 0
         success = False
@@ -89,9 +96,9 @@ class JoiMainMenuSkill(MycroftSkill):
         if self.stopped: return
 
         self.log.info("start_monitor")
-        # Schedule a new one every second to monitor Joi Server
+        # Schedule every few seconds to monitor Joi Server
         self.schedule_repeating_event(
-            self.monitor_joi_server, None, 1, name="MonitorJoiServer"
+            self.monitor_joi_server, None, 3, name="MonitorJoiServer"
         )
 
     def stop_monitor(self):
@@ -101,7 +108,21 @@ class JoiMainMenuSkill(MycroftSkill):
 
     def monitor_joi_server(self):
         #self.log.info("monitor_joi_server")
-        pass
+        messages = self.joi_client.get_DeviceMessages()
+        if messages:
+            self.log.info(f"Received {len(messages)} messages from Joi Server")
+            for msg in messages:
+                if msg.action:
+                    if msg.action == "play_photos":
+                        self.bus.emit(Message("skill.joi-skill-photo.start"))
+                    elif msg.action == "play_music":
+                        self.bus.emit(Message("skill.joi-skill-music.start"))
+                    elif msg.action == "stop_photos":
+                        self.bus.emit(Message("skill.joi-skill-photo.stop"))
+                    elif msg.action == "stop_music":
+                        self.bus.emit(Message("skill.joi-skill-music.stop"))
+                    else:
+                        self.log.warn(f"Unknown action {msg.action}")
 
     def handle_listener_started(self, message):
         self.log.info("handle_listener_started")
