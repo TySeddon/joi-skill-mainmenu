@@ -113,17 +113,19 @@ class JoiMainMenuSkill(MycroftSkill):
             self.log.info(f"Received {len(messages)} messages from Joi Server")
             for msg in messages:
                 self.log.info(msg)
-                if msg.action:
-                    if msg.action == "play_photos":
+                if msg.message and msg.message.action:
+                    action = msg.message.action
+                    self.log.info(action)
+                    if action == "play_photos":
                         self.bus.emit(Message("skill.joi-skill-photo.start"))
-                    elif msg.action == "play_music":
+                    elif action == "play_music":
                         self.bus.emit(Message("skill.joi-skill-music.start"))
-                    elif msg.action == "stop_photos":
+                    elif action == "stop_photos":
                         self.bus.emit(Message("skill.joi-skill-photo.stop"))
-                    elif msg.action == "stop_music":
+                    elif action == "stop_music":
                         self.bus.emit(Message("skill.joi-skill-music.stop"))
                     else:
-                        self.log.warn(f"Unknown action {msg.action}")
+                        self.log.warn(f"Unknown action {action}")
 
     def handle_listener_started(self, message):
         self.log.info("handle_listener_started")
