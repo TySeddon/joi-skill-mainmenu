@@ -41,7 +41,7 @@ class JoiMainMenuSkill(MycroftSkill):
     def handle_show_mainmenu_intent(self, message):
         """ This is an Adapt intent handler, it is triggered by a keyword."""
         self.log.info("handle_show_mainmenu_intent")
-        pass
+        self.open_browser_home()
 
     def stop(self):
         """ The stop method is called anytime a User says "Stop" or a similar command. 
@@ -100,7 +100,7 @@ class JoiMainMenuSkill(MycroftSkill):
         self.not_playing_count = 0
 
     def monitor_joi_server(self):
-        self.log.info("monitor_joi_server")
+        #self.log.info("monitor_joi_server")
         pass
 
     def handle_listener_started(self, message):
