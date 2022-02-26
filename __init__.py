@@ -34,8 +34,8 @@ class JoiMainMenuSkill(MycroftSkill):
         self.log.info("initialize")
 
         # establish connection to Joi server
-        joi_device_id = get_setting("device_id")
-        self.joi_client = JoiClient(joi_device_id)
+        self.joi_device_id = get_setting("device_id")
+        self.joi_client = JoiClient(self.joi_device_id)
         resident = self.joi_client.get_Resident()
         self.resident_name = resident.first_name
 
@@ -72,7 +72,7 @@ class JoiMainMenuSkill(MycroftSkill):
 
     def open_browser_home(self):
         joi_server_url = get_setting("joi_server_url")
-        url = f"{joi_server_url}/joi/joi_home?token={self.joi_client.token}"
+        url = f"{joi_server_url}/joi/joi_home?token={self.joi_client.token}&device={self.joi_device_id}"
 
         retry_count = 0
         success = False
