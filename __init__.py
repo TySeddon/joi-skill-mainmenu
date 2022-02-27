@@ -43,6 +43,8 @@ class JoiMainMenuSkill(MycroftSkill):
         self.add_event("skill.joi-skill-mainmenu.stop", self.stop)
         self.add_event("skill.joi-skill-mainmenu.show", self.open_browser_home)
 
+        self.open_browser_home()
+
         self.start_monitor()
         pass
 
