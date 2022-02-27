@@ -41,7 +41,7 @@ class JoiMainMenuSkill(MycroftSkill):
         self.resident_name = resident.first_name
 
         self.add_event("skill.joi-skill-mainmenu.stop", self.stop)
-        self.add_event("skill.joi-skill-mainmenu.show", self.open_browser_home)
+        self.add_event("skill.joi-skill-mainmenu.show", self.mainmenu)
 
         self.open_browser_home()
 
@@ -75,6 +75,11 @@ class JoiMainMenuSkill(MycroftSkill):
         self.log.info("shutdown")
 
     ###########################################
+
+    def mainmenu(self):
+        self.close_browser()
+        sleep(1)
+        self.open_browser_home()
 
     def open_browser_home(self):
         joi_server_url = get_setting("joi_server_url")
