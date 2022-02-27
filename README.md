@@ -53,7 +53,7 @@ Make script executable and writeable
     sudo chmod a+xw update-skills.sh
 
 ## Bash Script to Start Home Assistant
-In home director create file called start-smarthome.sh
+In home directory (~) create file called start-smarthome.sh
     #!/bin/bash
     sudo -u homeassistant -H -s<<"EOF"
     source /srv/homeassistant/bin/activate 
