@@ -12,7 +12,7 @@ All of these Mycroft Skills Manager (mycroft-msm) commands are executed on the R
     ./mycroft-msm remove joi-skill-mainmenu.tyseddon
 
 ### Bash Script to automate updating of skills
-In home director create file called update-skills.sh
+In home directory create file called update-skills.sh
     #!/bin/bash
 
     echo "----Updating joi-skill-utils----"
@@ -56,7 +56,7 @@ Make script executable and writeable
 In home directory (~) create file called start-smarthome.sh
     #!/bin/bash
     sudo -u homeassistant -H -s<<"EOF"
-    source /srv/homeassistant/bin/activate 
+    source /srv/homeassistant/.hass/bin/activate 
     hass     
     EOF
 
